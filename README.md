@@ -51,7 +51,7 @@ Modeling the Lorenz-63 system presents significant learning challenges due to it
 
 The system decouples dynamic state variables from invariant physical parameters, routing them through a continuous vector field neural network integrated via a differentiable numerical step scheme and optimized using a multi-step predictive loss function.
 
-### 1. VectorFieldNetworkDecoupled Architecture
+### 1. VectorFieldNetwork Architecture
 The continuous velocity field $f_\theta(\mathbf{x}, \mathbf{p})$ is parameterized via a Multi-Layer Perceptron (MLP) with explicit parameter concatenation:
 
 * **Augmented Input Layer:** Concatenates dynamic state variables $\mathbf{x} = [x, y, z]^T \in \mathbb{R}^3$ and static physical parameters $\mathbf{p} = [\sigma, \rho, \beta]^T \in \mathbb{R}^3$ into an augmented vector $\mathbf{q} \in \mathbb{R}^6$.
@@ -75,8 +75,8 @@ $$\mathbf{x}_{k+1} = \mathbf{x}_k + \frac{\Delta t}{2} \left(\mathbf{k}_1 + \mat
 
 This integration pipeline remains fully differentiable, allowing backpropagation of multi-step rollout errors directly into network parameters $\theta$.
 
-### 3. MPCObjectiveLossDecoupled Formulation
-Trajectory optimization utilizes a multi-step objective function (`MPCObjectiveLossDecoupled`) designed to evaluate predictive trajectories strictly on the 3D dynamic state space while excluding static parameters from penalization:
+### 3. MPCObjectiveLoss Formulation
+Trajectory optimization utilizes a multi-step objective function (`MPCObjectiveLoss`) designed to evaluate predictive trajectories strictly on the 3D dynamic state space while excluding static parameters from penalization:
 
 $$\mathcal{L}_{\text{MPC}}(H) = \frac{1}{H} \sum_{t=1}^{H} \frac{1}{B} \sum_{i=1}^{B} \left( \left( \hat{\mathbf{x}}_{i, t} - \mathbf{x}^*_{i, t} \right)^2 \odot \mathbf{Q} \right)$$
 

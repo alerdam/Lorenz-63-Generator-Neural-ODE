@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 
 
-class VectorFieldNetworkDecoupled(nn.Module):
+class VectorFieldNetwork(nn.Module):
     def __init__(self, state_dim: int = 3, param_dim: int = 3, latent_dim: int = 32):
         super().__init__()
         self.field_net = nn.Sequential(
@@ -51,7 +51,7 @@ class HeunNeuralODEIntegrator(nn.Module):
         return torch.stack(trajectory, dim=1)
 
 
-class MPCObjectiveLossDecoupled(nn.Module):
+class MPCObjectiveLoss(nn.Module):
     """
     Evaluates multi-step predictive trajectories strictly on the 3D dynamic state space.
     Static parameters [sigma, rho, beta] are excluded from loss penalization.

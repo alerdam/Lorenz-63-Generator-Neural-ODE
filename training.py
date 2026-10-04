@@ -13,7 +13,7 @@ from torch.utils.data import TensorDataset, DataLoader
 import numpy as np
 
 from LorenzDynamics import ParametricLorenzDynamics
-from modelArch import VectorFieldNetworkDecoupled, HeunNeuralODEIntegrator, MPCObjectiveLossDecoupled
+from modelArch import VectorFieldNetwork, HeunNeuralODEIntegrator, MPCObjectiveLoss
 
 
 
@@ -26,12 +26,12 @@ def execute_neural_ode_pipeline(weights_path: str = "Lorenz_NeuralODE.pth"):
     max_mpc_horizon = 5
 
     # Initialized with the optimized 32-neuron latent dimension
-    vector_field = VectorFieldNetworkDecoupled(state_dim=3, param_dim=3, latent_dim=32).to(device)
+    vector_field = VectorFieldNetwork(state_dim=3, param_dim=3, latent_dim=32).to(device)
     ode_integrator = HeunNeuralODEIntegrator(vector_field, step_size=integration_dt).to(device)
 
     optimizer = optim.AdamW(ode_integrator.parameters(), lr=2e-3, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
-    mpc_loss_fn = MPCObjectiveLossDecoupled().to(device)
+    mpc_loss_fn = MPCObjectiveLoss().to(device)
 
     print("| Generating Parametric 6D Physical Trajectories...")
     num_trajectories = 5000

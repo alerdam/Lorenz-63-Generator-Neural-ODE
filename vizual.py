@@ -8,7 +8,7 @@ from matplotlib.animation import FuncAnimation
 from scipy.integrate import solve_ivp
 
 from LorenzDynamics import ParametricLorenzDynamics
-from modelArch import VectorFieldNetworkDecoupled, HeunNeuralODEIntegrator
+from modelArch import VectorFieldNetwork, HeunNeuralODEIntegrator
 
 MODEL_WEIGHTS_PATH = "Lorenz_NeuralODE.pth"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -18,7 +18,7 @@ num_steps = 400
 dt = t_max / num_steps
 t_eval = np.linspace(0, t_max, num_steps)
 
-vector_field = VectorFieldNetworkDecoupled(state_dim=3, param_dim=3, latent_dim=32).to(device)
+vector_field = VectorFieldNetwork(state_dim=3, param_dim=3, latent_dim=32).to(device)
 
 if os.path.exists(MODEL_WEIGHTS_PATH):
     vector_field.load_state_dict(torch.load(MODEL_WEIGHTS_PATH, map_location=device))
